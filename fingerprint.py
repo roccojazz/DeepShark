@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     # args.type =
     parser.add_argument('--type', dest='type', action='store', default="1f_np")
-    parser.add_argument('--path', dest='path', action='store', default="fingerprint/ML/")
+    parser.add_argument('--path', dest='path', action='store', default="training/")
     parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="CFL")
     parser.add_argument('--fasta', dest='fasta', action='store', default="reads_150.fa")
     parser.add_argument('--fact', dest='fact', action='store', default='no_create')
