@@ -136,6 +136,7 @@ To carry out an experiment, follows the steps:
         ```
         
     `Rule-based read classifier:`
+    
         ```
         - `method`    : testing_reads_majority_step in SCRIPT testing.py
 
@@ -150,6 +151,7 @@ To carry out an experiment, follows the steps:
         ```
 
 - `Compute metrics:`
+
        ``` 
        - `cmd line`   : python metrics.py --path fingerprint/test/ 
                       --file test_majority_result_no_thresholds_list.txt 
