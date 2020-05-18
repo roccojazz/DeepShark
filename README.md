@@ -34,7 +34,7 @@ The dataset is composed of the following two files:
 
 To carry out an experiment, follows the steps:
 
-1) COMPUTE FINGERPRINT ######################################################
+- `Compute fingerprints` 
 
     - METHOD   : experiment_fingerprint_1f_np_step in SCRIPT fingerprint.py
 
@@ -58,7 +58,7 @@ To carry out an experiment, follows the steps:
                       the file list_experiment.txt (--filter no_list, otherwise)
 
 
-2) DATASETS #################################################################
+- `Build datasets`
 
     - METHOD   : experiment_dataset_step in SCRIPT training_mp.py
 
@@ -77,7 +77,7 @@ To carry out an experiment, follows the steps:
                           k-fingers (--k_type valid, otherwise)
 
 
-3) K-FINGERS CLASSIFIERS ####################################################
+- `Train K-fingers classifiers`
 
      - METHOD   : experiment_training_step in SCRIPT training.py
 
@@ -90,7 +90,7 @@ To carry out an experiment, follows the steps:
                  (ex. RF_kfinger_clsf_report_ICFL_COMB_K5.csv)
 
 
-4) READS CLASSIFICATION #####################################################
+- `Reads classification`
 
 - PRE-SETTING:
     a) A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
@@ -142,7 +142,7 @@ To carry out an experiment, follows the steps:
                       for each read in the FASTA file. 
 
 
-5) COMPUTE METRIC ###########################################################
+- `Compute metrics`
 
        - CMD_LINE   : python metrics.py --path fingerprint/test/ 
                       --file test_majority_result_no_thresholds_list.txt 
