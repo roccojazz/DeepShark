@@ -1,6 +1,37 @@
 # DeepShark
 Machine Learning and its Application to Bioinformatics: Lyndon factorizations
 
+## Pre-requisites
+
+Most of the methods are implemented in Python using `scikit-learn` (and utility
+functions from `numpy` and `pandas`).
+For ease of reproduction, the exact versions of the packages can be installed
+through the **conda package manager** by installing
+[`miniconda`](https://docs.conda.io/en/latest/miniconda.html) and replicating
+the environment using the file `spec-file.txt` in this repository with the
+command:
+
+```
+conda create --name lyndonenv --file spec-file.txt
+```
+
+## Data
+
+Due to size constraints, data is available at [this
+URL](https://drive.google.com/drive/folders/1_E-wKUA6PNSMqIa2jBGyFMiak4ilDsK3).
+The dataset is composed of the following two files:
+
+- `transcripts_genes.fa.gz`, containing the sequences of the transcripts used
+  for training the model and that should be placed (and `gunzip`-ed) in the
+  `training` directory.
+- `sample_10M_genes.fastq.gz`, containing a sample of 10M 100-bp long reads
+  simulated from Human chromosomes 1, 17, and 21 using [Flux
+  Simulator](https://dx.doi.org/10.1093/nar/gks666). This file should be placed
+  (and `gunzip`-ed) in the `testing` directory.
+
+
+## Reproduction
+
 To carry out an experiment, follows the steps:
 
 1) COMPUTE FINGERPRINT ######################################################
