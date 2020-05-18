@@ -142,6 +142,26 @@ def logistic_regression(path="fingerprint/ML/", type_factorization='CFL', k=3):
     print('\nTrain Logistic regresssion (%s, %s) - stop!' % (type_factorization, k))
 
 
+# Grid Search CV    
+def grid(cl,classifier,param_grid,n_folds,t_s_D,tLab_downsampled):
+    with open("fingerprint/"+cl+".txt","w") as f:
+        estimator = GridSearchCV(classifier, cv=n_folds, param_grid=param_grid, n_jobs=-1, verbose=1,scoring='accuracy')
+        estimator.fit(t_s_D, tLab_downsampled)
+        means = estimator.cv_results_['mean_test_score']
+        stds = estimator.cv_results_['std_test_score']
+        best=[]
+        max=0
+        for meana, std, params in zip(means, stds, estimator.cv_results_['params']):
+            if meana>max:
+                max=meana
+                best=params
+            print("%0.3f (+/-%0.03f) for %r" % (meana, std * 2, params))
+            f.write("%0.3f (+/-%0.03f) for %r" % (meana, std * 2, params))
+            f.write("\n")
+        print()
+    return best
+
+
 # Random forest k_finger classifier
 def random_forest_kfinger(path="fingerprint/ML/", type_factorization='CFL', k=8):
 
@@ -152,8 +172,12 @@ def random_forest_kfinger(path="fingerprint/ML/", type_factorization='CFL', k=8)
     train_scaled_D,test_scaled_D, training_set_labels, test_set_labels, label_encoder, min_max_scaler = train_test_generator(dataset_name)
 
     n_genes = len(set(training_set_labels))
-    classificatore = RandomForestClassifier(n_estimators=8, min_samples_leaf=1, n_jobs=-1)
-    classificatore.fit(train_scaled_D, training_set_labels)
+    
+    classificatore=RandomForestClassifier()
+    pg = {'n_estimators':[5,8,10,20,25,30], 'min_samples_leaf':[3,2,1],'n_jobs':[-1]}
+    bestRFparam=grid("RF",classificatore,pg,n_folds,train_scaled_D,training_set_labels)
+    classificatore=RandomForestClassifier(n_estimators=bestRFparam['n_estimators'],min_samples_leaf=bestRFparam['min_samples_leaf'],n_jobs=-1)
+    classificatore.fit(train_scaled_D,training_set_labels)
     
     labels_originarie = label_encoder.inverse_transform(np.arange(n_genes))
     y_pred = classificatore.predict(test_scaled_D)
@@ -221,12 +245,15 @@ def random_forest_fingerprint(path="fingerprint/test/", type_factorization='CFL'
     train_scaled_D = scaler.fit_transform(training_set_data)
     test_scaled_D = scaler.transform(test_set_data)
 
-    ####################################################################################################################
-    n_geni = len(set(training_set_labels))
-    classificatore=RandomForestClassifier(n_estimators=8,min_samples_leaf=1,n_jobs=-1)
-    classificatore.fit(train_scaled_D, training_set_labels)
-
-    labels_originarie = label_encoder.inverse_transform(np.arange(n_geni))
+    n_genes = len(set(training_set_labels))
+    
+    classificatore=RandomForestClassifier()
+    pg = {'n_estimators':[5,8,10,20,25,30], 'min_samples_leaf':[3,2,1],'n_jobs':[-1]}
+    bestRFparam=grid("RF",classificatore,pg,n_folds,train_scaled_D,training_set_labels)
+    classificatore=RandomForestClassifier(n_estimators=bestRFparam['n_estimators'],min_samples_leaf=bestRFparam['min_samples_leaf'],n_jobs=-1)
+    classificatore.fit(train_scaled_D,training_set_labels)
+        
+    labels_originarie = label_encoder.inverse_transform(np.arange(n_genes))
     y_pred = classificatore.predict(test_scaled_D)
 
     clsf = classification_report(test_set_labels, y_pred, target_names=labels_originarie, output_dict=True)
