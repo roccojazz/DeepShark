@@ -54,8 +54,7 @@ if __name__ == '__main__':
     parser.add_argument('--k_value', dest='k_value', action='store', default=3, type=int)
     parser.add_argument('-n', dest='n', action='store', default=1, type=int)
     parser.add_argument('--k_type', dest='k_type', action='store', default='extended')
-    parser.add_argument('--enrich', dest='enrich', action='store', default='no_string')
-
+    
     args = parser.parse_args()
 
     # BUILD DATASET
