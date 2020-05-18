@@ -35,7 +35,7 @@ The dataset is composed of the following two files:
 To carry out an experiment, follows the steps:
 
 - `Compute fingerprints` 
-
+    ```
     - `method`   : experiment_fingerprint_1f_np_step in SCRIPT fingerprint.py
 
     - `cmd line` : python fingerprint.py --type 1f_np --path training/ 
@@ -47,7 +47,8 @@ To carry out an experiment, follows the steps:
                  factorization a "fingerprint" file containing a row for each 
                  read, with the format "IDGENE FINGERPRINT", where 
                  "FINGERPRINT" is the fingerprint of the read
-
+    ```
+    
     `N.B.`
     - `--fact create` : to create a file containing the factors corresponding 
                       to the fingerprint fingerprint (--fact no_create, 
