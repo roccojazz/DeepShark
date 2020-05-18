@@ -108,7 +108,8 @@ To carry out an experiment, follows the steps:
         
     `RF Fingerprint classifier:` 
         ```
-        -` Training:`
+        
+        i)` Training:`
 
           - `method`    : training_train_RF_fingerprint_step in SCRIPT training.py
 
