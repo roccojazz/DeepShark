@@ -50,6 +50,7 @@ To carry out an experiment, follows the steps:
     ```
     
     `N.B.`
+    ```
     - `--fact create` : to create a file containing the factors corresponding 
                       to the fingerprint fingerprint (--fact no_create, 
                       otherwise)
@@ -57,10 +58,10 @@ To carry out an experiment, follows the steps:
                       otherwise)
     - `--filter list` : to consider only the reads for the genes contained in 
                       the file list_experiment.txt (--filter no_list, otherwise)
-
+    ```
 
 - `Build datasets`
-
+    ```
     - `method`   : experiment_dataset_step in SCRIPT training_mp.py
 
     - `cmd line` : python training.py --step dataset --path training/ 
@@ -72,14 +73,16 @@ To carry out an experiment, follows the steps:
                  Such a dataset will be splitted in 2 pickle files: 
                  dataset_X_factorization which contain the samples, and 
                  dataset_y_factorization which contains the corresponding labels
-
+    ```
+    
     `N.B.`
+    ```
     - `--k_type extended` : to apply the padding with -1 values to complete the 
                           k-fingers (--k_type valid, otherwise)
-
+    ```
 
 - `Train K-fingers classifiers`
-
+    ```
     - `method`   : experiment_training_step in SCRIPT training.py
 
     - `cmd line` : python training.py --step train --path training/ --k_value 5
@@ -89,20 +92,21 @@ To carry out an experiment, follows the steps:
                  (ex. RF_ICFL_COMB_K5.pickle) and the report CSV containing 
                  the metrics for the performance in training 
                  (ex. RF_kfinger_clsf_report_ICFL_COMB_K5.csv)
-
+    ```
 
 - `Reads classification`
-
     - `pre-settings:`
+        ```
         i) A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
         ii) The dataset for the k-finger trained classifier chosen 
            (ex. dataset_X_ICFL_COMB_K5.pickle, dataset_y_ICFL_COMB_K5.pickle)
         iii) The fingerprint and fact_fingerprint corresponding to the type of 
            factorization for which the chosen classifier was trained 
            (ex. fingerprint_ICFL_COMB.txt e fact_fingerprint_ICFL_COMB.txt)
-
+        ```
+        
     - `RF Fingerprint classifier:` 
-
+        ```
         i) Training:
 
         - method    : training_train_RF_fingerprint_step in SCRIPT training.py
@@ -128,9 +132,10 @@ To carry out an experiment, follows the steps:
         - return    : creates the file test_rf_fingerprint_result.txt containing 
                       a row for each read in the FASTA file. 
                       
-
+        ```
+        
     - `Rule-based read classifier:`
-
+        ```
         - method    : testing_reads_majority_step in SCRIPT testing.py
 
         - cmd line  : python testing.py --step test_majority --path fingerprint/test/ 
@@ -141,10 +146,11 @@ To carry out an experiment, follows the steps:
 
         - return    : creates a file test_majority_result.txt containing a row 
                       for each read in the FASTA file. 
-
+        ```
 
 - `Compute metrics`
-
+       ``` 
        - cmd line   : python metrics.py --path fingerprint/test/ 
                       --file test_majority_result_no_thresholds_list.txt 
                       --problem classification
+       ```
