@@ -31,9 +31,7 @@ To carry out an experiment, follows the steps:
                       the file list_experiment.txt (--filter no_list, otherwise)
 
 
-#############################################################################
 2) DATASETS #################################################################
-#############################################################################
 
     - METHOD   : experiment_dataset_step in SCRIPT training_mp.py
 
@@ -54,13 +52,9 @@ To carry out an experiment, follows the steps:
                           k-fingers (--k_type valid, otherwise)
 
 
-#############################################################################
 3) K-FINGERS CLASSIFIERS ####################################################
-#############################################################################
 
-a) TRAIN K_FINGERS CLASSIFIERS ##############################################
-
-    - METHOD   : experiment_training_step in SCRIPT training.py
+     - METHOD   : experiment_training_step in SCRIPT training.py
 
     - CMD_LINE : python training.py --step train --path training/ --k_value 5
                  --type_factorization ICFL_COMB  --model RF -n 4
@@ -71,9 +65,7 @@ a) TRAIN K_FINGERS CLASSIFIERS ##############################################
                  (ex. RF_kfinger_clsf_report_ICFL_COMB_K5.csv)
 
 
-#############################################################################
 4) READS CLASSIFICATION #####################################################
-#############################################################################
 
 - PRE-SETTING:
     a) A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
@@ -83,9 +75,9 @@ a) TRAIN K_FINGERS CLASSIFIERS ##############################################
        factorization for which the chosen classifier was trained 
        (ex. fingerprint_ICFL_COMB.txt e fact_fingerprint_ICFL_COMB.txt)
 
-a) RF FINGERPRINT CLASSIFIER: ###############################################
+    a) RF FINGERPRINT CLASSIFIER: ##########################################
 
-    i) TRAINING RF FINGERPRINT CLASSIFIER:
+        i) TRAINING RF FINGERPRINT CLASSIFIER:
 
         - METHOD    : training_train_RF_fingerprint_step in SCRIPT training.py
 
@@ -98,7 +90,7 @@ a) RF FINGERPRINT CLASSIFIER: ###############################################
                       and the corresponding CSV report 
                       (RF_fingerprint_clsf_report_ICFL_COMB.csv")
 
-    ii) TESTING READS:
+        ii) TESTING READS:
 
         - METHOD    : testing_reads_RF_fingerprint_step in SCRIPT testing.py
 
@@ -111,7 +103,7 @@ a) RF FINGERPRINT CLASSIFIER: ###############################################
                       a row for each read in the FASTA file. 
                       
 
-a) RULE-BASED READ CLASSIFIER: ###############################################
+    b) RULE-BASED READ CLASSIFIER: ###############################################
 
         - METHOD    : testing_reads_majority_step in SCRIPT testing.py
 
@@ -125,10 +117,7 @@ a) RULE-BASED READ CLASSIFIER: ###############################################
                       for each read in the FASTA file. 
 
 
-#############################################################################
 5) COMPUTE METRIC ###########################################################
-#############################################################################
-
 
        - CMD_LINE   : python metrics.py --path fingerprint/test/ 
                       --file test_majority_result_no_thresholds_list.txt 
