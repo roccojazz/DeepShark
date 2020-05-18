@@ -160,16 +160,15 @@ def testing_reads_RF_fingerprint_step(args):
 ##################################################### MAIN #############################################################
 ########################################################################################################################
 if __name__ == '__main__':
-    #os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-
+    
     # Gestione argomenti ###############################################################################################
     parser = argparse.ArgumentParser()
-    parser.add_argument('--step', dest='step', action='store', default="1rf")
-    parser.add_argument('--path', dest='path', action='store', default="fingerprint/test/")
-    parser.add_argument('--fasta', dest='fasta', action='store', default="example_sample_10M_genes.fastq.gz")
+    parser.add_argument('--step', dest='step', action='store', default="test_majority")
+    parser.add_argument('--path', dest='path', action='store', default="testing/")
+    parser.add_argument('--fasta', dest='fasta', action='store', default="sample_10M_genes.fastq.gz")
     parser.add_argument('--fact', dest='fact', action='store', default='create')
     parser.add_argument('--shift', dest='shift', action='store', default='no_shift')
-    parser.add_argument('--best_model', dest='best_model', action='store', default='RF_CFL_ICFL-20_K8.pickle')
+    parser.add_argument('--best_model', dest='best_model', action='store', default='RF_ICFL_COMB_K5.pickle')
     parser.add_argument('--rf_fingerprint_model', dest='rf_fingerprint_model', action='store', default='RF_fingerprint_classifier_ICFL_COMB.pickle')
     parser.add_argument('--k_type', dest='k_type', action='store', default='extended')
     parser.add_argument('--k_value', dest='k_value', action='store', default=3, type=int)
@@ -177,7 +176,7 @@ if __name__ == '__main__':
     parser.add_argument('--criterion', dest='criterion', action='store', default='majority')
     parser.add_argument('--random', dest='random', action='store', default='random')
     parser.add_argument('--n_for_genes', dest='n_for_genes', action='store', default=10, type=float)
-    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="CFL")
+    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="ICFL_COMB")
     parser.add_argument('-n', dest='n', action='store', default=1, type=int)
 
     args = parser.parse_args()
