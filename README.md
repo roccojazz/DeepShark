@@ -92,13 +92,13 @@ To carry out an experiment, follows the steps:
 
 - `Reads classification`
 
-- PRE-SETTING:
-    a) A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
-    b) The dataset for the k-finger trained classifier chosen 
-       (ex. dataset_X_ICFL_COMB_K5.pickle, dataset_y_ICFL_COMB_K5.pickle)
-    c) The fingerprint and fact_fingerprint corresponding to the type of 
-       factorization for which the chosen classifier was trained 
-       (ex. fingerprint_ICFL_COMB.txt e fact_fingerprint_ICFL_COMB.txt)
+    - `pre-settings:`
+        i) A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
+        ii) The dataset for the k-finger trained classifier chosen 
+           (ex. dataset_X_ICFL_COMB_K5.pickle, dataset_y_ICFL_COMB_K5.pickle)
+        iii) The fingerprint and fact_fingerprint corresponding to the type of 
+           factorization for which the chosen classifier was trained 
+           (ex. fingerprint_ICFL_COMB.txt e fact_fingerprint_ICFL_COMB.txt)
 
     a) RF FINGERPRINT CLASSIFIER: ##########################################
 
