@@ -7,9 +7,7 @@ To carry out an experiment, follows the steps:
 3) Train the classifiers
 4) Test the reads containf in a FASTA file
 
-#############################################################################
 1) COMPUTE FINGERPRINT ######################################################
-#############################################################################
 
     - METHOD   : experiment_fingerprint_1f_np_step in SCRIPT fingerprint.py
 
