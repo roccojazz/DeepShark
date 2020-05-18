@@ -95,7 +95,8 @@ To carry out an experiment, follows the steps:
     ```
 
 - `Reads classification`
-    - `pre-settings:`
+
+    `pre-settings:`
         ```
         i) A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
         ii) The dataset for the k-finger trained classifier chosen 
@@ -105,7 +106,7 @@ To carry out an experiment, follows the steps:
            (ex. fingerprint_ICFL_COMB.txt e fact_fingerprint_ICFL_COMB.txt)
         ```
         
-    - `RF Fingerprint classifier:` 
+    `RF Fingerprint classifier:` 
         ```
         i) Training:
 
@@ -134,7 +135,7 @@ To carry out an experiment, follows the steps:
                       
         ```
         
-    - `Rule-based read classifier:`
+    `Rule-based read classifier:`
         ```
         - method    : testing_reads_majority_step in SCRIPT testing.py
 
