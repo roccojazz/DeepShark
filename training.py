@@ -6,6 +6,7 @@ from multiprocessing.pool import ThreadPool as Pool
 from functools import partial
 from machine_learning_utils import mapping_pool_train,train
 
+
 # Create datasets (args.step = 'dataset') ##############################################################################
 def experiment_dataset_step(args):
 
@@ -15,7 +16,6 @@ def experiment_dataset_step(args):
         func = partial(mapping_pool_create_ML_dataset, args.path, args.k_type, args.enrich)
         for _ in pool.map(func, task):
             print('Mapping create ML dataset')
-
 
 
 # Train classifiers (args.step = 'train') ##############################################################################
