@@ -34,7 +34,7 @@ The dataset is composed of the following two files:
 
 To carry out an experiment, follows the steps:
 
-- Compute fingerprints 
+- `Compute fingerprints` 
     ```
     - `method`   : experiment_fingerprint_1f_np_step in SCRIPT fingerprint.py
 
