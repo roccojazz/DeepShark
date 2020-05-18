@@ -64,7 +64,7 @@ To carry out an experiment, follows the steps:
 
     - CMD_LINE : python training.py --step dataset --path training/ 
                  --type_factorization ICFL_COMB  --k_value 5
-                 --enrich no_string --k_type extended -n 4
+                 --k_type extended -n 4
 
     - RETURN   : for each type of factorization it uses the corresponding 
                  "fingerprint" file to generate a dataset for each value of k. 
@@ -73,8 +73,6 @@ To carry out an experiment, follows the steps:
                  dataset_y_factorization which contains the corresponding labels
 
     N.B.
-    * --enrich string   : to associate the enriched string for each k-finger 
-                          (--enrich no_string, otherwise)
     * --k_type extended : to apply the padding with -1 values to complete the 
                           k-fingers (--k_type valid, otherwise)
 
