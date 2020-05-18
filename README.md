@@ -2,10 +2,6 @@
 Machine Learning and its Application to Bioinformatics: Lyndon factorizations
 
 To carry out an experiment, follows the steps:
-1) Compute fingerprints
-2) Compute datasets fot the training
-3) Train the classifiers
-4) Test the reads containf in a FASTA file
 
 1) COMPUTE FINGERPRINT ######################################################
 
