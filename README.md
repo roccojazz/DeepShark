@@ -108,9 +108,8 @@ To carry out an experiment, follows the steps:
         
     `RF Fingerprint classifier:` 
         
-        ```
         i) `Training:`
-
+        ```
           - `method`    : training_train_RF_fingerprint_step in SCRIPT training.py
 
           - `cmd line`  : python training.py --step train_RF_fingerprint 
@@ -121,9 +120,9 @@ To carry out an experiment, follows the steps:
                         (ex. RF_fingerprint_classifier_ICFL_COMB.pickle)
                         and the corresponding CSV report 
                         (RF_fingerprint_clsf_report_ICFL_COMB.csv")
-
+        ```    
         ii) `Testing reads:`
-
+        ``` 
           - `method`    : testing_reads_RF_fingerprint_step in SCRIPT testing.py
 
           - `cmd line`  : python testing.py --step test_RF_fingerprint --path testing/ 
