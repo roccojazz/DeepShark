@@ -65,8 +65,8 @@ if __name__ == '__main__':
     # args.type =
     parser.add_argument('--type', dest='type', action='store', default="1f_np")
     parser.add_argument('--path', dest='path', action='store', default="training/")
-    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="CFL")
-    parser.add_argument('--fasta', dest='fasta', action='store', default="reads_150.fa")
+    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="ICFL_COMB")
+    parser.add_argument('--fasta', dest='fasta', action='store', default="transcripts_genes.fa")
     parser.add_argument('--fact', dest='fact', action='store', default='no_create')
     parser.add_argument('--shift', dest='shift', action='store', default='no_shift')
     parser.add_argument('--filter', dest='filter', action='store', default='list')
