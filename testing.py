@@ -18,7 +18,6 @@ def testing_reads_majority_step(args):
     # Extract of reads (Format = ID GENE read)
     read_lines = extract_reads(name_file=input_fasta, filter=args.filter, step='test', n_for_genes=args.n_for_genes)
 
-    reads_no_suffix = []
     read_lines = [s.upper() for s in read_lines]
 
     if len(read_lines) == 0:
