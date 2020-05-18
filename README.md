@@ -97,61 +97,61 @@ To carry out an experiment, follows the steps:
 - `Reads classification`
 
     `pre-settings:`
-        ```
-        i) A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
-        ii) The dataset for the k-finger trained classifier chosen 
-           (ex. dataset_X_ICFL_COMB_K5.pickle, dataset_y_ICFL_COMB_K5.pickle)
-        iii) The fingerprint and fact_fingerprint corresponding to the type of 
-           factorization for which the chosen classifier was trained 
-           (ex. fingerprint_ICFL_COMB.txt e fact_fingerprint_ICFL_COMB.txt)
-        ```
+    ```
+    - A k-finger trained classifier (ex. RF_ICFL_COMB_K5.pickle)
+    - The dataset for the k-finger trained classifier chosen 
+       (ex. dataset_X_ICFL_COMB_K5.pickle, dataset_y_ICFL_COMB_K5.pickle)
+    - The fingerprint and fact_fingerprint corresponding to the type of 
+       factorization for which the chosen classifier was trained 
+       (ex. fingerprint_ICFL_COMB.txt e fact_fingerprint_ICFL_COMB.txt)
+    ```
         
     `RF Fingerprint classifier:` 
         ```
-        i) Training:
+        -` Training:`
 
-        - method    : training_train_RF_fingerprint_step in SCRIPT training.py
+          - `method`    : training_train_RF_fingerprint_step in SCRIPT training.py
 
-        - cmd line  : python training.py --step train_RF_fingerprint 
-                      --path testing/ --model RF_FINGERPRINT
-                      --type_factorization ICFL_COMB -n 4
+          - `cmd line`  : python training.py --step train_RF_fingerprint 
+                        --path testing/ --model RF_FINGERPRINT
+                        --type_factorization ICFL_COMB -n 4
 
-        - return    : save the PICKLE RF FINGERPRINT trained 
-                      (ex. RF_fingerprint_classifier_ICFL_COMB.pickle)
-                      and the corresponding CSV report 
-                      (RF_fingerprint_clsf_report_ICFL_COMB.csv")
+          - `return`    : save the PICKLE RF FINGERPRINT trained 
+                        (ex. RF_fingerprint_classifier_ICFL_COMB.pickle)
+                        and the corresponding CSV report 
+                        (RF_fingerprint_clsf_report_ICFL_COMB.csv")
 
-        ii) Testing reads:
+        ii) `Testing reads:`
 
-        - method    : testing_reads_RF_fingerprint_step in SCRIPT testing.py
+          - `method`    : testing_reads_RF_fingerprint_step in SCRIPT testing.py
 
-        - cmd line  : python testing.py --step test_RF_fingerprint --path testing/ 
-                      --fasta sample_10M_genes.fastq.gz --filter list
-                      --rf_fingerprint_model RF_fingerprint_classifier_ICFL_COMB.pickle  
-                      --type_factorization ICFL_COMB --random no_random -n 4
+          - `cmd line`  : python testing.py --step test_RF_fingerprint --path testing/ 
+                        --fasta sample_10M_genes.fastq.gz --filter list
+                        --rf_fingerprint_model RF_fingerprint_classifier_ICFL_COMB.pickle  
+                        --type_factorization ICFL_COMB --random no_random -n 4
 
-        - return    : creates the file test_rf_fingerprint_result.txt containing 
-                      a row for each read in the FASTA file. 
+          - `return`    : creates the file test_rf_fingerprint_result.txt containing 
+                        a row for each read in the FASTA file. 
                       
         ```
         
     `Rule-based read classifier:`
         ```
-        - method    : testing_reads_majority_step in SCRIPT testing.py
+        - `method`    : testing_reads_majority_step in SCRIPT testing.py
 
-        - cmd line  : python testing.py --step test_majority --path fingerprint/test/ 
+        - `cmd line`  : python testing.py --step test_majority --path fingerprint/test/ 
                      --fasta sample_10M_genes.fastq.gz --best_model RF_ICFL_COMB_K5.pickle 
                      --fact create --criterion majority --random no_random
                      --filter list --type_factorization ICFL_COMB --k_value 5 
                      --k_type extended --n_for_genes 10 -n 4
 
-        - return    : creates a file test_majority_result.txt containing a row 
+        - `return`    : creates a file test_majority_result.txt containing a row 
                       for each read in the FASTA file. 
         ```
 
 - `Compute metrics`
        ``` 
-       - cmd line   : python metrics.py --path fingerprint/test/ 
+       - `cmd line`   : python metrics.py --path fingerprint/test/ 
                       --file test_majority_result_no_thresholds_list.txt 
                       --problem classification
        ```
