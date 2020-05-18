@@ -107,9 +107,9 @@ To carry out an experiment, follows the steps:
     ```
         
     `RF Fingerprint classifier:` 
-        ```
         
-        i)` Training:`
+        ```
+        i) `Training:`
 
           - `method`    : training_train_RF_fingerprint_step in SCRIPT training.py
 
@@ -133,7 +133,6 @@ To carry out an experiment, follows the steps:
 
           - `return`    : creates the file test_rf_fingerprint_result.txt containing 
                         a row for each read in the FASTA file. 
-                      
         ```
         
     `Rule-based read classifier:`
@@ -150,7 +149,7 @@ To carry out an experiment, follows the steps:
                       for each read in the FASTA file. 
         ```
 
-- `Compute metrics`
+- `Compute metrics:`
        ``` 
        - `cmd line`   : python metrics.py --path fingerprint/test/ 
                       --file test_majority_result_no_thresholds_list.txt 
