@@ -49,7 +49,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--step', dest='step', action='store', default="fingerprint")
     parser.add_argument('--path', dest='path', action='store', default="training/")
-    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="CFL")
+    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="ICFL_COMB")
     parser.add_argument('--model', dest='model', action='store', default="RF")
     parser.add_argument('--k_value', dest='k_value', action='store', default=3, type=int)
     parser.add_argument('-n', dest='n', action='store', default=1, type=int)
