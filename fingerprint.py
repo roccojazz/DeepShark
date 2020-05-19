@@ -1,7 +1,7 @@
 import argparse
 
 from fingerprint_utils import extract_reads,compute_fingerprint_by_list
-from multiprocessing.pool import ThreadPool as Pool
+from multiprocessing.pool import Pool
 from functools import partial
 from factorizations import CFL, ICFL_recursive, CFL_icfl
 from factorizations_comb import d_cfl, d_icfl, d_cfl_icfl
