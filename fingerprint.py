@@ -66,7 +66,7 @@ def experiment_fingerprint_1f_np_step(args):
             factorization = d_cfl_icfl
             T = 30
 
-        func = partial(compute_fingerprint_by_list, args.fact, args.shift, args.type_factorization, factorization, T)
+        func = partial(compute_fingerprint_by_list, args.fact, args.shift, factorization, T)
 
         fingerprint_lines = []
         fingerprint_fact_lines = []
