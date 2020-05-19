@@ -124,7 +124,7 @@ To carry out an experiment, follows the steps:
           - `cmd line`  : python testing.py --step test_RF_fingerprint --path testing/ 
                           --rf_fingerprint_model RF_fingerprint_classifier_ICFL_COMB.pickle 
                           --fasta sample_10M_genes.fastq.gz 
-                          --type_factorization ICFL_COMB --random no_random -n 4
+                          --type_factorization ICFL_COMB -n 4
 
           - `return`    : creates the file test_rf_fingerprint_result.txt containing 
                           a row for each read in the FASTA file. 
