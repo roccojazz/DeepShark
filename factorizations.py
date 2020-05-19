@@ -99,7 +99,7 @@ def compute_fingerprint_by_list_factors(list_fact):
 
 # ------------------------ CFL ---------------------------------------------------------------------
 # CFL - Lyndon factorization - Duval's algorithm
-def CFL(word):
+def CFL(word,T):
     """
     CFL Duval's algorithm.
     """
@@ -140,7 +140,7 @@ def find_index(window, preview):
 
 # ----------------------- ICFL ----------------------------------------------------------------------
 # ICFL recursive (without using of compute_br)- Inverse Lyndon factorization
-def ICFL_recursive(word):
+def ICFL_recursive(word,T):
     """In this version of ICFL, we don't execute compute_br - one only O(n) scanning of word"""
     br_list = []
     icfl_list = []
