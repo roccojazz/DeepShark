@@ -92,7 +92,6 @@ def testing_reads_majority_step(args):
             factorization = d_cfl_icfl
             T = 10
         elif type_factorization == "CFL_ICFL_COMB-20":
-            print('FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCT')
             factorization = d_cfl_icfl
             T = 20
         elif type_factorization == "CFL_ICFL_COMB-30":
@@ -108,7 +107,8 @@ def testing_reads_majority_step(args):
     # SPLIT fingerprints blocks
     size = int(len(fingerprint_blocks) / args.n)
     splitted_blocks = [fingerprint_blocks[i:i + size] for i in range(0, len(fingerprint_blocks), size)]
-
+    splitted_blocks_for_process = [splitted_blocks[i:i + int(len(splitted_blocks) / args.n)] for i in
+                                   range(0, len(splitted_blocks), int(len(splitted_blocks) / args.n))]
     with ThreadPool(args.n) as pool:
 
         # Best model
@@ -121,7 +121,7 @@ def testing_reads_majority_step(args):
         test_result_file = open(args.path + "test_majority_result_" + args.criterion + "_" + args.filter + ".txt", 'w')
 
         test_fingerprint_fact_lines = []
-        for res in pool.map(func, splitted_blocks):
+        for res in pool.map(func, splitted_blocks_for_process):
             test_fingerprint_fact_lines = test_fingerprint_fact_lines + res
         ################################################################################################################
 
@@ -228,7 +228,8 @@ def testing_reads_RF_fingerprint_step(args):
     # MP TESTING READS #################################################################################################
     size = int(len(fingerprint_blocks) / args.n)
     splitted_blocks = [fingerprint_blocks[i:i + size] for i in range(0, len(fingerprint_blocks), size)]
-
+    splitted_blocks_for_process = [splitted_blocks[i:i + int(len(splitted_blocks) / args.n)] for i in
+                                   range(0, len(splitted_blocks), int(len(splitted_blocks) / args.n))]
     with ThreadPool(args.n) as pool:
 
         # RF fingerprint model
@@ -241,7 +242,7 @@ def testing_reads_RF_fingerprint_step(args):
         test_result_file = open(args.path + "test_rf_fingerprint_result_" + args.filter + ".txt", 'w')
 
         test_fingerprint_fact_lines = []
-        for res in pool.map(func, splitted_blocks):
+        for res in pool.map(func, splitted_blocks_for_process):
             test_fingerprint_fact_lines = test_fingerprint_fact_lines + res
 
         test_result_file.writelines(test_fingerprint_fact_lines)
