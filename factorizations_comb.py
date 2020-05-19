@@ -186,11 +186,11 @@ def d_duval(data):
     return result
 
 
-def d_cfl(data):
+def d_cfl(data,T):
     return d_duval(data)
 
 
-def d_icfl(data):
+def d_icfl(data,T):
     if type(data) == str:
         result = d_duval_(data, icfl, k = None)
     else:
