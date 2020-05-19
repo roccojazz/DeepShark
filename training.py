@@ -2,7 +2,7 @@ import argparse
 import itertools
 
 from fingerprint_utils import mapping_pool_create_ML_dataset
-from multiprocessing.pool import ThreadPool as Pool
+from multiprocessing.pool import Pool
 from functools import partial
 from machine_learning_utils import mapping_pool_train,train
 
