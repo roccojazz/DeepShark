@@ -4,7 +4,7 @@ import pickle
 import gzip
 
 from functools import partial
-from multiprocessing.pool import ThreadPool as Pool
+from multiprocessing.pool import ThreadPool,Pool
 from fingerprint_utils import extract_reads, extract_reads_mp, compute_fingerprint_by_list
 from machine_learning_utils import test_reads_majority,test_reads_rf_fingerprint
 from factorizations import CFL, ICFL_recursive, CFL_icfl
@@ -64,7 +64,7 @@ def testing_reads_majority_step(args):
     splitted_lines = [read_lines[i:i + size] for i in range(0, len(read_lines), size)]
 
     fingerprint_blocks = []
-    with Pool(args.n) as pool:
+    with ThreadPool(args.n) as pool:
 
         type_factorization = args.type_factorization
 
@@ -184,7 +184,7 @@ def testing_reads_RF_fingerprint_step(args):
     splitted_lines = [read_lines[i:i + size] for i in range(0, len(read_lines), size)]
 
     fingerprint_blocks = []
-    with Pool(args.n) as pool:
+    with ThreadPool(args.n) as pool:
 
         type_factorization = args.type_factorization
 
