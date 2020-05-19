@@ -19,7 +19,7 @@ def mapping_pool_train(path="fingerprint/ML/", tuple_fact_k=('CFL',3, 'RF')):
 
 
 # Training of classifiers
-def train(path="fingerprint/ML/", type_factorization='CFL', k=3, type_model = 'RF',list_best_model=None,dataset_X_RF_pipeline=None,k_window="extended"):
+def train(path="fingerprint/ML/", type_factorization='CFL', k=3, type_model = 'RF'):
 
     if type_model == 'RF':
         random_forest_kfinger(path=path, type_factorization=type_factorization, k=k)
@@ -84,7 +84,7 @@ def compute_classification_thresholds(model=None, test_set=None, labels=None,cls
 
 
 # Multinomial Naive Bayesian (MNB) model
-def multinomial_NB_model(path="fingerprint/ML/", type_factorization='CFL', k=3):
+def multinomial_NB_model(path="training/", type_factorization='CFL', k=3):
 
     print('\nTrain MNB (%s, %s) - start...' % (type_factorization, k))
 
@@ -114,7 +114,7 @@ def multinomial_NB_model(path="fingerprint/ML/", type_factorization='CFL', k=3):
 
 
 # Logistic Regression (LR) model
-def logistic_regression(path="fingerprint/ML/", type_factorization='CFL', k=3):
+def logistic_regression(path="training/", type_factorization='CFL', k=3):
 
     print('\nTrain Logistic regression (%s, %s) - start...' % (type_factorization, k))
 
@@ -142,28 +142,8 @@ def logistic_regression(path="fingerprint/ML/", type_factorization='CFL', k=3):
     print('\nTrain Logistic regresssion (%s, %s) - stop!' % (type_factorization, k))
 
 
-# Grid Search CV    
-def grid(cl,classifier,param_grid,n_folds,t_s_D,tLab_downsampled):
-    with open("fingerprint/"+cl+".txt","w") as f:
-        estimator = GridSearchCV(classifier, cv=n_folds, param_grid=param_grid, n_jobs=-1, verbose=1,scoring='accuracy')
-        estimator.fit(t_s_D, tLab_downsampled)
-        means = estimator.cv_results_['mean_test_score']
-        stds = estimator.cv_results_['std_test_score']
-        best=[]
-        max=0
-        for meana, std, params in zip(means, stds, estimator.cv_results_['params']):
-            if meana>max:
-                max=meana
-                best=params
-            print("%0.3f (+/-%0.03f) for %r" % (meana, std * 2, params))
-            f.write("%0.3f (+/-%0.03f) for %r" % (meana, std * 2, params))
-            f.write("\n")
-        print()
-    return best
-
-
 # Random forest k_finger classifier
-def random_forest_kfinger(path="fingerprint/ML/", type_factorization='CFL', k=8):
+def random_forest_kfinger(path="training/", type_factorization='CFL', k=8):
 
     print('\nTrain RF k_finger classifier (%s, %s) - start...' % (type_factorization, k))
 
@@ -172,12 +152,8 @@ def random_forest_kfinger(path="fingerprint/ML/", type_factorization='CFL', k=8)
     train_scaled_D,test_scaled_D, training_set_labels, test_set_labels, label_encoder, min_max_scaler = train_test_generator(dataset_name)
 
     n_genes = len(set(training_set_labels))
-    
-    classificatore=RandomForestClassifier()
-    pg = {'n_estimators':[5,8,10,20,25,30], 'min_samples_leaf':[3,2,1],'n_jobs':[-1]}
-    bestRFparam=grid("RF",classificatore,pg,n_folds,train_scaled_D,training_set_labels)
-    classificatore=RandomForestClassifier(n_estimators=bestRFparam['n_estimators'],min_samples_leaf=bestRFparam['min_samples_leaf'],n_jobs=-1)
-    classificatore.fit(train_scaled_D,training_set_labels)
+    classificatore = RandomForestClassifier(n_estimators=8, min_samples_leaf=1, n_jobs=-1)
+    classificatore.fit(train_scaled_D, training_set_labels)
     
     labels_originarie = label_encoder.inverse_transform(np.arange(n_genes))
     y_pred = classificatore.predict(test_scaled_D)
@@ -197,7 +173,7 @@ def random_forest_kfinger(path="fingerprint/ML/", type_factorization='CFL', k=8)
 
 
 # Given a dataset, train a RF fingerprint classifier
-def random_forest_fingerprint(path="fingerprint/test/", type_factorization='CFL'):
+def random_forest_fingerprint(path="training/", type_factorization='CFL'):
 
     print('\nTrain RF fingerprint classifier (%s) - start...' % (type_factorization))
 
@@ -208,7 +184,7 @@ def random_forest_fingerprint(path="fingerprint/test/", type_factorization='CFL'
     # Build dataset
     y = []
     X = []
-    max_fingerprint = 0
+    count_lenghts_fingerprint = 0
     for fingerprint in fingerprints:
         lengths = fingerprint
         lengths_list = lengths.split()
@@ -216,23 +192,27 @@ def random_forest_fingerprint(path="fingerprint/test/", type_factorization='CFL'
         y_i = lengths_list[0]
         x_i = lengths_list[1:]
 
-        if max_fingerprint < len(x_i):
-            max_fingerprint = len(x_i)
+        count_lenghts_fingerprint += len(x_i)
+
         X.append(x_i)
         y.append(y_i)
+
+    mean_length = int(count_lenghts_fingerprint / len(fingerprints))
 
     # Padding
     X_padded = []
     for x_i in X:
 
-        if len(x_i) < max_fingerprint:
-            for i in range(len(x_i), max_fingerprint):
+        if len(x_i) < mean_length:
+            for i in range(len(x_i), mean_length):
                 x_i = np.append(x_i, ['-1'])
 
             x_i = x_i.tolist()
-            X_padded.append(x_i)
-        else:
-            X_padded.append(x_i)
+
+        elif len(x_i) >= mean_length:
+            x_i = x_i[:mean_length]
+
+        X_padded.append(x_i)
 
     # Split dataset
 
@@ -245,15 +225,12 @@ def random_forest_fingerprint(path="fingerprint/test/", type_factorization='CFL'
     train_scaled_D = scaler.fit_transform(training_set_data)
     test_scaled_D = scaler.transform(test_set_data)
 
-    n_genes = len(set(training_set_labels))
-    
-    classificatore=RandomForestClassifier()
-    pg = {'n_estimators':[5,8,10,20,25,30], 'min_samples_leaf':[3,2,1],'n_jobs':[-1]}
-    bestRFparam=grid("RF",classificatore,pg,n_folds,train_scaled_D,training_set_labels)
-    classificatore=RandomForestClassifier(n_estimators=bestRFparam['n_estimators'],min_samples_leaf=bestRFparam['min_samples_leaf'],n_jobs=-1)
-    classificatore.fit(train_scaled_D,training_set_labels)
-        
-    labels_originarie = label_encoder.inverse_transform(np.arange(n_genes))
+    ####################################################################################################################
+    n_geni = len(set(training_set_labels))
+    classificatore=RandomForestClassifier(n_estimators=8,min_samples_leaf=1,n_jobs=-1)
+    classificatore.fit(train_scaled_D, training_set_labels)
+
+    labels_originarie = label_encoder.inverse_transform(np.arange(n_geni))
     y_pred = classificatore.predict(test_scaled_D)
 
     clsf = classification_report(test_set_labels, y_pred, target_names=labels_originarie, output_dict=True)
@@ -266,14 +243,14 @@ def random_forest_fingerprint(path="fingerprint/test/", type_factorization='CFL'
     print('RF fingerprint classifier accuracy: ', acc)
 
     # Dump pickle
-    pickle.dump([classificatore, label_encoder, scaler, max_fingerprint], open(path + "RF_fingerprint_classifier_" + type_factorization + ".pickle", 'wb'))
+    pickle.dump([classificatore, label_encoder, scaler, mean_length], open(path + "RF_fingerprint_classifier_" + type_factorization + ".pickle", 'wb'))
 
     print('\nTrain RF fingerprint classifier (%s) - stop!' % (type_factorization))
 
 
 # RULE-BASED READ CLASSIFIER
 # Given a set of reads, performs classification by using the majority (or thresholds) criterion on  Best k-finger classification
-def test_reads_majority(list_best_model=None, path='fingerprint/test/', type_factorization='CFL_ICFL-20', k_window='extended',k_value=8,criterion='majority',denoise = 'none', fingerprint_block = []):
+def test_reads_majority(list_best_model=None, path='testing/', type_factorization='CFL_ICFL-20', k_window='extended',k_value=8,criterion='majority', fingerprint_block = []):
 
     print('\nRule-based read classifier - start...')
     test_lines = []
@@ -290,7 +267,7 @@ def test_reads_majority(list_best_model=None, path='fingerprint/test/', type_fac
     np_threshold = np.array(df_threshold)
     min_threshold = np.min(np_threshold)
 
-    for fingerprint,fact_fingerprint in zip((fingerprint_block[0])[0],(fingerprint_block[0])[1]):
+    for fingerprint in (fingerprint_block[0])[0]:
         lengths_list = fingerprint.split()
 
         k_fingers = computeWindow(lengths_list[1:], k_value, k_window=k_window)
@@ -318,8 +295,8 @@ def test_reads_majority(list_best_model=None, path='fingerprint/test/', type_fac
             if (unique_max == True) and (count_max_element >= (len(y_pred.tolist())/2)):
                 # Absolute majority
                 id_pred = max_element
-                fact_fingerprint = fact_fingerprint.replace('\n', '')
-                test_lines.append('ID_PREDICTED: ' + str((best_label_encoder.inverse_transform([id_pred]))[0]) + ' - ID_LABEL: ' + fact_fingerprint + ' - PREDICTION: ' + str(y_pred) + '\n')
+                fingerprint = fingerprint.replace('\n', '')
+                test_lines.append('ID_PREDICTED: ' + str((best_label_encoder.inverse_transform([id_pred]))[0]) + ' - ID_LABEL: ' + fingerprint + ' - PREDICTION: ' + str(y_pred) + '\n')
             else:
 
                 y_pred_proba = best_model.predict_proba(test_scaled_D)
@@ -338,8 +315,8 @@ def test_reads_majority(list_best_model=None, path='fingerprint/test/', type_fac
                 max_th_index = np.argmax(np.array(max_diff))
                 id_pred = max_index[max_th_index]
 
-                fact_fingerprint = fact_fingerprint.replace('\n', '')
-                test_lines.append('ID_PREDICTED: ' + str((best_label_encoder.inverse_transform([id_pred]))[0]) + ' - ID_LABEL: ' + fact_fingerprint + ' - PREDICTION: ' + str(y_pred) + ' - MAX_DIFF: ' + str(max_diff) + '\n')
+                fingerprint = fingerprint.replace('\n', '')
+                test_lines.append('ID_PREDICTED: ' + str((best_label_encoder.inverse_transform([id_pred]))[0]) + ' - ID_LABEL: ' + fingerprint + ' - PREDICTION: ' + str(y_pred) + ' - MAX_DIFF: ' + str(max_diff) + '\n')
 
             ############################################################################################################
         else:
@@ -360,8 +337,8 @@ def test_reads_majority(list_best_model=None, path='fingerprint/test/', type_fac
             max_th_index = np.argmax(np.array(max_diff))
             id_pred = max_index[max_th_index]
 
-            fact_fingerprint = fact_fingerprint.replace('\n','')
-            test_lines.append('ID_PREDICTED: ' + str((best_label_encoder.inverse_transform([id_pred]))[0]) + ' - ID_LABEL: ' + fact_fingerprint + ' - PREDICTION: ' + str(y_pred) + ' - MAX_DIFF: ' + str(max_diff) + '\n')
+            fingerprint = fingerprint.replace('\n','')
+            test_lines.append('ID_PREDICTED: ' + str((best_label_encoder.inverse_transform([id_pred]))[0]) + ' - ID_LABEL: ' + fingerprint + ' - PREDICTION: ' + str(y_pred) + ' - MAX_DIFF: ' + str(max_diff) + '\n')
 
     print('\nRule-based read classifier - stop!')
 
@@ -378,27 +355,29 @@ def test_reads_rf_fingerprint(list_rf_fingerprint_model=None, fingerprint_block 
     rf_fingerprint_model = list_rf_fingerprint_model[0]
     rf_fingerprint_encoder = list_rf_fingerprint_model[1]
     rf_fingerprint_scaler = list_rf_fingerprint_model[2]
-    rf_fingerprint_max_length = list_rf_fingerprint_model[3]
+    rf_fingerprint_mean_length = list_rf_fingerprint_model[3]
 
-    for fingerprint, fact_fingerprint in zip((fingerprint_block[0])[0], (fingerprint_block[0])[1]):
+    for fingerprint in (fingerprint_block[0])[0]:
         lengths_list = fingerprint.split()
 
         fing = lengths_list[1:]
 
-        # Padding con 0 values
-        if len(fing) < rf_fingerprint_max_length:
-            for i in range(len(fing), rf_fingerprint_max_length):
+        # Padding with -1 values
+        if len(fing) < rf_fingerprint_mean_length:
+            for i in range(len(fing), rf_fingerprint_mean_length):
                 fing = np.append(fing, ['-1'])
 
             fing = fing.tolist()
+        elif len(fing) >= rf_fingerprint_mean_length:
+            fing = fing[:rf_fingerprint_mean_length]
 
         # Read_rf classification
         test_scaled_D = rf_fingerprint_scaler.transform([fing])
         read_y_pred = rf_fingerprint_model.predict(test_scaled_D)
 
-        fact_fingerprint = fact_fingerprint.replace('\n', '')
+        fingerprint = fingerprint.replace('\n', '')
         label = str((rf_fingerprint_encoder.inverse_transform(read_y_pred))[0])
-        test_lines.append('ID_PREDICTED: ' + label  + ' - ID_LABEL: ' + fact_fingerprint + ' - PREDICTION: ' + str(read_y_pred) + '\n')
+        test_lines.append('ID_PREDICTED: ' + label + ' - ID_LABEL: ' + fingerprint + ' - PREDICTION: ' + str(read_y_pred) + '\n')
 
     print('\nTest reads  RF Fingerprint - stop!')
 
