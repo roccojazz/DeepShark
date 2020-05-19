@@ -3,6 +3,8 @@ import argparse
 from fingerprint_utils import extract_reads,compute_fingerprint_by_list
 from multiprocessing.pool import ThreadPool as Pool
 from functools import partial
+from factorizations import CFL, ICFL_recursive, CFL_icfl
+from factorizations_comb import d_cfl, d_icfl, d_cfl_icfl
 
 
 # Create fingerprint files (args.step = 'fingerprint') #################################################################
@@ -32,7 +34,39 @@ def experiment_fingerprint_1f_np_step(args):
 
     with Pool(args.n) as pool:
 
-        func = partial(compute_fingerprint_by_list, args.fact, args.shift, args.type_factorization)
+        type_factorization = args.type_factorization
+
+        # Check type factorization
+        factorization = None
+        T = None
+        if type_factorization == "CFL":
+            factorization = CFL
+        elif type_factorization == "ICFL":
+            factorization = ICFL_recursive
+        elif type_factorization == "CFL_ICFL-10":
+            factorization = CFL_icfl
+            T = 10
+        elif type_factorization == "CFL_ICFL-20":
+            factorization = CFL_icfl
+            T = 20
+        elif type_factorization == "CFL_ICFL-30":
+            factorization = CFL_icfl
+            T = 30
+        elif type_factorization == "CFL_COMB":
+            factorization = d_cfl
+        elif type_factorization == "ICFL_COMB":
+            factorization = d_icfl
+        elif type_factorization == "CFL_ICFL_COMB-10":
+            factorization = d_cfl_icfl
+            T = 10
+        elif type_factorization == "CFL_ICFL_COMB-20":
+            factorization = d_cfl_icfl
+            T = 20
+        elif type_factorization == "CFL_ICFL_COMB-30":
+            factorization = d_cfl_icfl
+            T = 30
+
+        func = partial(compute_fingerprint_by_list, args.fact, args.shift, args.type_factorization, factorization, T)
 
         fingerprint_lines = []
         fingerprint_fact_lines = []
@@ -62,13 +96,12 @@ if __name__ == '__main__':
     # Gestione argomenti ###############################################################################################
     parser = argparse.ArgumentParser()
 
-    # args.type =
-    parser.add_argument('--type', dest='type', action='store', default="1f_np")
-    parser.add_argument('--path', dest='path', action='store', default="training/")
-    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default="ICFL_COMB")
-    parser.add_argument('--fasta', dest='fasta', action='store', default="transcripts_genes.fa")
-    parser.add_argument('--fact', dest='fact', action='store', default='no_create')
-    parser.add_argument('--shift', dest='shift', action='store', default='no_shift')
+    parser.add_argument('--type', dest='type', action='store', default='1f_np')
+    parser.add_argument('--path', dest='path', action='store', default='training/')
+    parser.add_argument('--type_factorization', dest='type_factorization', action='store', default='CFL')
+    parser.add_argument('--fasta', dest='fasta', action='store', default='transcript_genes.fa')
+    parser.add_argument('--fact', dest='fact', action='store', default='create')
+    parser.add_argument('--shift', dest='shift', action='store', default='shift')
     parser.add_argument('--filter', dest='filter', action='store', default='list')
     parser.add_argument('-n', dest='n', action='store', default=1, type=int)
 
