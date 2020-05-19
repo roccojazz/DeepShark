@@ -108,7 +108,7 @@ To carry out an experiment, follows the steps:
           - `method`    : training_train_RF_fingerprint_step in SCRIPT training.py
 
           - `cmd line`  : python training.py --step train_RF_fingerprint 
-                        --path testing/ --model RF_FINGERPRINT
+                        --path training/ --model RF_FINGERPRINT
                         --type_factorization ICFL_COMB -n 4
 
           - `return`    : save the PICKLE RF FINGERPRINT trained 
