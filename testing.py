@@ -109,7 +109,7 @@ def testing_reads_majority_step(args):
     size = int(len(fingerprint_blocks) / args.n)
     splitted_blocks = [fingerprint_blocks[i:i + size] for i in range(0, len(fingerprint_blocks), size)]
 
-    with Pool(args.n) as pool:
+    with ThreadPool(args.n) as pool:
 
         # Best model
         best_model_path = args.path + args.best_model
@@ -229,7 +229,7 @@ def testing_reads_RF_fingerprint_step(args):
     size = int(len(fingerprint_blocks) / args.n)
     splitted_blocks = [fingerprint_blocks[i:i + size] for i in range(0, len(fingerprint_blocks), size)]
 
-    with Pool(args.n) as pool:
+    with ThreadPool(args.n) as pool:
 
         # RF fingerprint model
         rf_fingerprint_model_path = args.path + args.rf_fingerprint_model
