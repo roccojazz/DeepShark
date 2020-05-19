@@ -92,13 +92,14 @@ def testing_reads_majority_step(args):
             factorization = d_cfl_icfl
             T = 10
         elif type_factorization == "CFL_ICFL_COMB-20":
+            print('FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCT')
             factorization = d_cfl_icfl
             T = 20
         elif type_factorization == "CFL_ICFL_COMB-30":
             factorization = d_cfl_icfl
             T = 30
 
-        func = partial(compute_fingerprint_by_list, args.fact, args.shift, args.type_factorization, factorization, T)
+        func = partial(compute_fingerprint_by_list, args.fact, args.shift, factorization, T)
 
         for res in pool.map(func, splitted_lines):
             fingerprint_blocks.append((res[0], res[1]))
@@ -217,7 +218,7 @@ def testing_reads_RF_fingerprint_step(args):
             factorization = d_cfl_icfl
             T = 30
 
-        func = partial(compute_fingerprint_by_list, args.fact, args.shift, args.type_factorization,factorization,T)
+        func = partial(compute_fingerprint_by_list, args.fact, args.shift, factorization,T)
 
         for res in pool.map(func, splitted_lines):
             fingerprint_blocks.append((res[0], res[1]))
