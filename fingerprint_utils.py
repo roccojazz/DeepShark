@@ -508,7 +508,7 @@ def extract_reads_mp(name_file='fingerprint/ML/reads_150.fa', filter='list', ste
 
 
 # Given a list of reads and a factorization technique, compute the list containing, for each read, the corresponding fingerprint
-def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', type_factorization='CFL',factorization=CFL,T=None,list_reads=[]):
+def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', factorization=CFL,T=None,list_reads=[]):
 
     fingerprint_lines = []
     fingerprint_fact_lines = []
