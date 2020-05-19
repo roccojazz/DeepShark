@@ -136,6 +136,10 @@ def create_ML_dataset(path="fingerprint/ML/", k_window='valid', enrich='no_strin
     ####################################################################################################################
 
     for i in range(0, len(fingerprints)):
+
+        if len(fingerprints[i]) == 0:
+            print('empty row')
+
         lengths = fingerprints[i]
         lengths_list = lengths.split()
 
@@ -215,7 +219,8 @@ def read_gz(fasta_lines):
 
     i = 0
     while True:
-
+        print(i)
+        print(fasta_lines)
         # ID_GENE
         l_1 = str(fasta_lines[i])
         l_1= l_1.replace('b\'', '')
@@ -245,6 +250,42 @@ def read_gz(fasta_lines):
 
     return lines
 
+
+# Read file GZ containing reads
+def read_gz_mp(fasta_lines):
+
+    lines = []
+    read = ''
+    step = ''
+
+    for fasta_line in fasta_lines:
+
+        # ID_GENE
+        l_1 = str(fasta_line[0])
+        l_1= l_1.replace('b\'', '')
+        s_l1 = l_1.split()
+        if len(s_l1) == 2:
+            id_gene = s_l1[1]
+            id_gene = id_gene.replace('\\n', '')
+            id_gene = id_gene.replace('\'', '')
+            read = read + id_gene + ' '
+        else:
+            s_l1 = l_1.split(',')
+            read = read + s_l1[1] + ' '
+
+        # Read
+        l_2 = str(fasta_line[1])
+        l_2 = l_2.replace('b\'', '')
+        l_2 = l_2.replace('\\n', '')
+        l_2 = l_2.replace('\'', '')
+        read = read + l_2
+
+        lines.append(read)
+        read = ''
+
+    return lines
+
+
 # Read file FASTA
 def read_fasta(fasta_lines):
 
@@ -266,6 +307,27 @@ def read_fasta(fasta_lines):
 
     return lines
 
+# Read file FASTA
+def read_fasta_mp(fasta_lines):
+
+    lines = []
+    read = ''
+    step = ''
+    fasta_lines = fasta_lines[0]
+    for s in fasta_lines:
+        if s[0] == '>':
+            if read != '':
+                lines.append(read)
+                read = ''
+
+            s = s.replace('\n', '')
+            s_list = s.split()
+            read = s_list[1] + ' '
+        else:
+            s = s.replace('\n', '')
+            read += s
+
+    return lines
 
 
 # Given a FASTA file returns the list containing ONLY the reads, for each read, the corresponding fingerprint
@@ -358,9 +420,95 @@ def extract_reads(name_file='fingerprint/ML/reads_150.fa', filter='list', n_for_
     return read_lines
 
 
+# Given a FASTA file returns the list containing ONLY the reads, for each read, the corresponding fingerprint
+# Multi_processing version
+def extract_reads_mp(name_file='fingerprint/ML/reads_150.fa', filter='list', step='fingerprint', n_for_genes = None, read_lines = []):
+
+    print('\nExtract reads - start...')
+
+    # Creazione  dizionario per cpntare i geni trovati
+    list_id_genes = None
+    dict_n_for_genes = None
+    if n_for_genes != None:
+        file_experiment = open('list_experiment.txt')
+        list_id_genes = file_experiment.readlines()
+        list_id_genes = [s.replace('\n', '') for s in list_id_genes]
+        dict_n_for_genes = {i: 0 for i in list_id_genes}
+        file_experiment.close()
+
+    lines = []
+
+    # Scrittura su file
+    if name_file.endswith('.gz'):
+        # GZ FILE
+        lines = read_gz_mp(read_lines)
+    elif name_file.endswith('.fa') or name_file.endswith('.fasta') or name_file.endswith('.fastq') or name_file.endswith('.txt'):
+        # FASTA FILE
+        lines = read_fasta_mp(read_lines)
+
+    read_lines = []
+
+    for s in lines:
+
+        new_line = ''
+        new_fact_line = ''
+
+        str_line = s.split()
+        id_gene = str_line[0]
+        id_gene = id_gene.replace('\n', '')
+
+        # Create lines
+        file_experiment = open('list_experiment.txt')
+        list_id_genes = file_experiment.readlines()
+        list_id_genes = [s.replace('\n','') for s in list_id_genes]
+        if filter == 'list':
+            if id_gene in list_id_genes:
+
+                ########################################################################################################
+                if n_for_genes != None:
+                    n_for_id_gene = dict_n_for_genes[id_gene]
+                    if n_for_id_gene < n_for_genes:
+
+                        lbl_id_gene = id_gene + ' '
+
+                        # UPPER fingerprint
+                        sequence = str_line[1]
+                        if step == 'training':
+                            sequence = sequence.upper()
+                        new_line = lbl_id_gene + ' ' +  sequence
+                        new_line += '\n'
+                        read_lines.append(new_line)
+
+                        n_for_id_gene += 1
+                        dict_n_for_genes[id_gene] = n_for_id_gene
+                else:
+                ########################################################################################################
+                    lbl_id_gene = id_gene + ' '
+
+                    # UPPER
+                    if step == 'training':
+                        sequence = sequence.upper()
+
+                    sequence = str_line[1]
+                    new_line = lbl_id_gene + ' ' + sequence
+                    new_line += '\n'
+                    read_lines.append(new_line)
+        else:
+            lbl_id_gene = id_gene + ' '
+            new_line = lbl_id_gene + str_line[1]
+            read_lines.append(new_line)
+
+        file_experiment.close()
+
+    print('\nExtract reads - stop!')
+
+    return read_lines
+
+
+
 
 # Given a list of reads and a factorization technique, compute the list containing, for each read, the corresponding fingerprint
-def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', type_factorization='CFL',list_reads=[]):
+def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', type_factorization='CFL',factorization=CFL,T=None,list_reads=[]):
 
     fingerprint_lines = []
     fingerprint_fact_lines = []
@@ -376,27 +524,7 @@ def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', type_fa
 
         list_of_shifts = shift_string(read, 100, shift)
         for sft in list_of_shifts:
-            list_fact = []
-            if type_factorization == "CFL":
-                list_fact = CFL(sft)
-            elif type_factorization == "ICFL":
-                list_fact = ICFL_recursive(sft)
-            elif type_factorization == "CFL_ICFL-10":
-                list_fact = CFL_icfl(sft, 10)
-            elif type_factorization == "CFL_ICFL-20":
-                list_fact = CFL_icfl(sft, 20)
-            elif type_factorization == "CFL_ICFL-30":
-                list_fact = CFL_icfl(sft, 30)
-            elif type_factorization == "CFL_COMB":
-                list_fact = d_cfl(sft)
-            elif type_factorization == "ICFL_COMB":
-                list_fact = d_icfl(sft)
-            elif type_factorization == "CFL_ICFL_COMB-10":
-                list_fact = d_cfl_icfl(sft, 10)
-            elif type_factorization == "CFL_ICFL_COMB-20":
-                list_fact = d_cfl_icfl(sft, 20)
-            elif type_factorization == "CFL_ICFL_COMB-30":
-                list_fact = d_cfl_icfl(sft, 30)
+            list_fact = factorization(sft,T)
 
             # Remove special characters
             if '>>' in list_fact:
@@ -415,8 +543,6 @@ def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', type_fa
                 fingerprint_fact_lines.append(new_fact_line)
 
     return fingerprint_lines,fingerprint_fact_lines
-
-
 
 def cut_suffix_for_test(read):
     for i in range(len(read)):
