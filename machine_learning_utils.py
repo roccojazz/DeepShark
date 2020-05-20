@@ -152,7 +152,7 @@ def random_forest_kfinger(path="training/", type_factorization='CFL', k=8):
     train_scaled_D,test_scaled_D, training_set_labels, test_set_labels, label_encoder, min_max_scaler = train_test_generator(dataset_name)
 
     n_genes = len(set(training_set_labels))
-    classificatore = RandomForestClassifier(n_estimators=8, min_samples_leaf=1, n_jobs=-1)
+    classificatore = RandomForestClassifier(n_estimators=8, min_samples_leaf=1, n_jobs=1)
     classificatore.fit(train_scaled_D, training_set_labels)
     
     labels_originarie = label_encoder.inverse_transform(np.arange(n_genes))
@@ -227,7 +227,7 @@ def random_forest_fingerprint(path="training/", type_factorization='CFL'):
 
     ####################################################################################################################
     n_geni = len(set(training_set_labels))
-    classificatore=RandomForestClassifier(n_estimators=8,min_samples_leaf=1,n_jobs=-1)
+    classificatore=RandomForestClassifier(n_estimators=8,min_samples_leaf=1,n_jobs=1)
     classificatore.fit(train_scaled_D, training_set_labels)
 
     labels_originarie = label_encoder.inverse_transform(np.arange(n_geni))
