@@ -107,8 +107,7 @@ def testing_reads_majority_step(args):
     # SPLIT fingerprints blocks
     size = int(len(fingerprint_blocks) / args.n)
     splitted_blocks = [fingerprint_blocks[i:i + size] for i in range(0, len(fingerprint_blocks), size)]
-    splitted_blocks_for_process = [splitted_blocks[i:i + int(len(splitted_blocks) / args.n)] for i in
-                                   range(0, len(splitted_blocks), int(len(splitted_blocks) / args.n))]
+    
     with ThreadPool(args.n) as pool:
 
         # Best model
@@ -121,7 +120,7 @@ def testing_reads_majority_step(args):
         test_result_file = open(args.path + "test_majority_result_" + args.criterion + "_" + args.filter + ".txt", 'w')
 
         test_fingerprint_fact_lines = []
-        for res in pool.map(func, splitted_blocks_for_process):
+        for res in pool.map(func, splitted_blocks):
             test_fingerprint_fact_lines = test_fingerprint_fact_lines + res
         ################################################################################################################
 
