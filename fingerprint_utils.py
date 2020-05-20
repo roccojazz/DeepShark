@@ -509,7 +509,8 @@ def extract_reads_mp(name_file='fingerprint/ML/reads_150.fa', filter='list', ste
 
 # Given a list of reads and a factorization technique, compute the list containing, for each read, the corresponding fingerprint
 def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', factorization=CFL,T=None,list_reads=[]):
-
+    
+    print('Compute fingerprint start...')
     fingerprint_lines = []
     fingerprint_fact_lines = []
 
@@ -541,7 +542,9 @@ def compute_fingerprint_by_list(fact_file='no_create', shift='no_shift', factori
                 new_fact_line = lbl_id_gene + ' '.join(fact for fact in list_fact)
                 new_fact_line += '\n'
                 fingerprint_fact_lines.append(new_fact_line)
-
+    
+    print('... Compute fingerprint stop!')
+    
     return fingerprint_lines,fingerprint_fact_lines
 
 def cut_suffix_for_test(read):
