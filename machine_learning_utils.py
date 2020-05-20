@@ -164,7 +164,7 @@ def random_forest_kfinger(path="training/", type_factorization='CFL', k=8):
     csv_name = path + "RF_kfinger_clsf_report_" + type_factorization + "_K" + str(k) + ".csv"
     clsf_report.to_csv(csv_name, index= True)
 
-    print("Random Forest accuracy: ", accuracy_score(test_set_labels,classificatore.predict(test_scaled_D)))
+    #print("Random Forest accuracy: ", accuracy_score(test_set_labels,classificatore.predict(test_scaled_D)))
 
     # Pickle [RF model, labels_originarie,
     pickle.dump([classificatore,label_encoder, min_max_scaler], open(path + "RF_" + type_factorization + "_K" + str(k) + ".pickle", 'wb'))
@@ -240,7 +240,7 @@ def random_forest_fingerprint(path="training/", type_factorization='CFL'):
     clsf_report.to_csv(csv_name, index=True)
 
     acc = accuracy_score(test_set_labels, classificatore.predict(test_scaled_D))
-    print('RF fingerprint classifier accuracy: ', acc)
+    #print('RF fingerprint classifier accuracy: ', acc)
 
     # Dump pickle
     pickle.dump([classificatore, label_encoder, scaler, mean_length], open(path + "RF_fingerprint_classifier_" + type_factorization + ".pickle", 'wb'))
@@ -267,7 +267,7 @@ def test_reads_majority(list_best_model=None, path='testing/', type_factorizatio
     np_threshold = np.array(df_threshold)
     min_threshold = np.min(np_threshold)
 
-    for fingerprint in (fingerprint_block[0])[0]:
+    for fingerprint in fingerprint_block[0]:
         lengths_list = fingerprint.split()
 
         k_fingers = computeWindow(lengths_list[1:], k_value, k_window=k_window)
@@ -357,7 +357,8 @@ def test_reads_rf_fingerprint(list_rf_fingerprint_model=None, fingerprint_block 
     rf_fingerprint_scaler = list_rf_fingerprint_model[2]
     rf_fingerprint_mean_length = list_rf_fingerprint_model[3]
 
-    for fingerprint in (fingerprint_block[0])[0]:
+    for fingerprint in fingerprint_block[0]:
+
         lengths_list = fingerprint.split()
 
         fing = lengths_list[1:]
