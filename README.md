@@ -70,12 +70,7 @@ To carry out an experiment, follows the steps:
                    dataset_y_factorization which contains the corresponding labels
     ```
     
-    `N.B.`
-    ```
-    - `--k_type extended` : to apply the padding with -1 values to complete the 
-                            k-fingers (--k_type valid, otherwise)
-    ```
-
+    
 - `Train K-fingers classifiers`
     ```
     - `method`   : experiment_training_step in SCRIPT training.py
