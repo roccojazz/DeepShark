@@ -279,7 +279,7 @@ def CFL_icfl(word,C):
                     if len(w) <= C:
                         CFL_list.append(word[k:k + j - i])
                     else:
-                        ICFL_list_recursive = ICFL_recursive(w)
+                        ICFL_list_recursive = ICFL_recursive(w,C)
 
                         # Insert << to indicate the begin of the subdecomposition of w
                         CFL_list.append("<<")
